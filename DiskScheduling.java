@@ -42,6 +42,7 @@ public class DiskScheduling {
                     System.out.println("[G] Exit");
                     System.out.print("Enter Choice: ");
                     stringAlgChoice = input.next();
+                    input.close();
                     switch (stringAlgChoice) {
                         case "A":
                             FirstComeFirstServe(intCurrentPosition, intArrayRequests, intNumOfRequests);
@@ -86,7 +87,7 @@ public class DiskScheduling {
         } while (intInputAgain == 1);
     }
 
-    public static void FirstComeFirstServe(int intCurrentPosition, int intArrayRequests[], int intNumOfRequests) {
+    private static void FirstComeFirstServe(int intCurrentPosition, int intArrayRequests[], int intNumOfRequests) {
         int intDistance, intCurTrack, intSeekCount = 0;
         for (int i = 0; i < intArrayRequests.length; i++) {
             intCurTrack = intArrayRequests[i];
