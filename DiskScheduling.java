@@ -1,4 +1,4 @@
-import java.util.Scanner;
+import java.util.*;
 
 public class DiskScheduling {
     public static void main(String args[]) {
@@ -6,6 +6,7 @@ public class DiskScheduling {
 
         int intCurrentPosition, intTrackSize, intNumOfRequests, intSeekRate, intInputAgain = 0;
         String stringAlgChoice, stringInputAgain;
+
         do {
             System.out.print("Input current position: ");
             intCurrentPosition = input.nextInt();
@@ -27,6 +28,7 @@ public class DiskScheduling {
                                 System.out.println("Invalid Input Please try again");
                             } else {
                                 intCheck = 0;
+
                             }
                         } while (intCheck == 1);
                     }

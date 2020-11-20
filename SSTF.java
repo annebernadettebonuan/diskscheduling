@@ -1,13 +1,5 @@
-import java.util.Scanner;
+import java.util.*;
 
-public class SSTF{
-    public static void main(String[] args){
-        System.out.println("Hrllo");
+public class SSTF {
 
-        Scanner s = new Scanner(System.in);
-        int a = s.nextInt();
-
-        System.out.println(a);
-        s.close();
-    }
 }
