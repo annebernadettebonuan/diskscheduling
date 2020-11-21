@@ -1,7 +1,5 @@
-import java.util.*;
-
 public class SSTF {
-    public void computeSSTF(int intCurrentPosition, int intArrayRequests[]) {
+    public void compute(int intCurrentPosition, int intArrayRequests[]) {
         if (intArrayRequests.length == 0)
             return;
 
