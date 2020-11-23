@@ -4,7 +4,7 @@ public class SCAN{
 
 		int[] visited = new int[arrRequests.length + 1];
 
-        System.out.println("Sequence: ");
+        System.out.println("Seekk Sequence is:");
 
 		for (int i = 0 ; i < arrRequests.length ; i++){
 			int position = -1;
@@ -42,7 +42,7 @@ public class SCAN{
 			visited[position] = 1;
             seek_time += Math.abs(arrRequests[position] - intCurrent);
             
-			System.out.println(arrRequests[position]);
+			System.out.println("Track: " + arrRequests[position]);
 			intCurrent = arrRequests[position];
 		}
 		System.out.println("\nTotal Seek Time : " + seek_time);

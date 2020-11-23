@@ -1,6 +1,8 @@
 public class FCFS {
     public void compute(int intCurrent, int arrRequests[]) {
         int intDistance, intCurTrack, seek_time = 0;
+
+        System.out.println("Seekk Sequence is:");
         for (int i = 0; i < arrRequests.length; i++) {
             intCurTrack = arrRequests[i];
 
@@ -8,6 +10,7 @@ public class FCFS {
 
             seek_time += intDistance;
 
+            System.out.println("Track: " + intCurTrack);
             intCurrent = intCurTrack;
         }
         System.out.println("Total Seek Time: " + seek_time);

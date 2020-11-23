@@ -2,7 +2,7 @@ import java.util.*;
 
 public class CSCAN {
     public void compute(int intCurrent, int arrRequests[], int intSize) {
-        int intDistance, intCurTrack, intSeekCount = 0;
+        int intDistance, intCurTrack, seek_time = 0;
         ArrayList<Integer> arrayLeft = new ArrayList<Integer>();
         ArrayList<Integer> arrayRight = new ArrayList<Integer>();
         ArrayList<Integer> arraySequence = new ArrayList<Integer>();
@@ -20,18 +20,18 @@ public class CSCAN {
         Collections.sort(arrayLeft);
         Collections.sort(arrayRight);
 
+        System.out.println("Seekk Sequence is:");
+        
         for (int i = 0; i < arrayRight.size(); i++) {
             intCurTrack = arrayRight.get(i);
-            // appending current track to seek sequence
             arraySequence.add(intCurTrack);
 
-            // calculate absolute distance
             intDistance = Math.abs(intCurTrack - intCurrent);
 
-            // increase the total count
-            intSeekCount += intDistance;
+            seek_time += intDistance;
 
-            // accessed track is now new head
+            System.out.println("Track: " + intCurTrack);
+
             intCurrent = intCurTrack;
         }
 
@@ -39,20 +39,17 @@ public class CSCAN {
         for (int i = 0; i < arrayLeft.size(); i++) {
             intCurTrack = arrayLeft.get(i);
 
-            // appending current track to seek sequence
             arraySequence.add(intCurTrack);
 
-            // calculate absolute distance
             intDistance = Math.abs(intCurTrack - intCurrent);
+            
+            seek_time += intDistance;
 
-            // increase the total count
-            intSeekCount += intDistance;
-
-            // accessed track is now the new head
+            System.out.println("Track: " + intCurTrack);
             intCurrent = intCurTrack;
         }
 
-        System.out.println("Total Head Movement: " + intSeekCount);
+        System.out.println("Total Seek Time: " + seek_time);
 
     }
 }
