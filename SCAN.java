@@ -4,7 +4,7 @@ public class SCAN{
 
 		int[] visited = new int[arrRequests.length + 1];
 
-        System.out.println("Seekk Sequence is:");
+        System.out.println("Seek Sequence is:");
 
 		for (int i = 0 ; i < arrRequests.length ; i++){
 			int position = -1;

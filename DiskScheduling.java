@@ -129,7 +129,10 @@ public class DiskScheduling {
                 scan.compute(intCurrent, arrRequests, intSize, strDirection);
                 break;
             case "D":
+                strDirection = getDirection();
                 System.out.println("LOOK");
+                LOOK look = new LOOK();
+                look.compute(intCurrent, arrRequests, intSize, strDirection);
                 
                 break;
             case "E":
@@ -139,9 +142,10 @@ public class DiskScheduling {
                 cscan.compute(intCurrent, arrRequests, intSize);
                 break;
             case "F":
-                strDirection = getDirection();
-
+     
                 System.out.println("Circular LOOK");
+                CLOOK clook = new CLOOK();
+                clook.compute(intCurrent, arrRequests, intSize);
                 
                 break;
             case "G":
@@ -154,7 +158,6 @@ public class DiskScheduling {
 
     private static String getDirection(){
         String strDirection = "";
-
         boolean isCorrect = false;
         while(!isCorrect){
             try{
