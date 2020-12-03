@@ -1,3 +1,9 @@
+/*
+* Bonuan, Anne Bernadette L.
+* Sing, James Anthony P.
+* Ybera, Jose Miguel
+*/
+
 import java.util.*;
 
 public class DiskScheduling {
