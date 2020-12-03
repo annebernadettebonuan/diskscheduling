@@ -4,7 +4,7 @@ public class DiskScheduling {
     static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
-        int intCurrent = 0, intSize = 0, intReqNum = 0, intSeekRate = 0; //seek rate not used
+        int intCurrentPosition = 0, intSize = 0, intReqNum = 0, intSeekRate = 0; //seek rate not used
         boolean isComplete = false;
         String strInput;
 
@@ -15,7 +15,7 @@ public class DiskScheduling {
             while (!isCorrect) {
                 try {
                     System.out.print("Input Current Position: ");
-                    intCurrent = Integer.parseInt(input.nextLine());
+                    intCurrentPosition = Integer.parseInt(input.nextLine());
                     isCorrect = true;
                 } catch (Exception e) {
                     isCorrect = false;
@@ -30,7 +30,7 @@ public class DiskScheduling {
                     System.out.print("Input Track Size: ");
                     intSize = Integer.parseInt(input.nextLine());
     
-                    if(intSize > intCurrent){
+                    if(intSize > intCurrentPosition){
                         isCorrect = true;
                     }else{
                         System.out.println("The size should be more than the current position.");
@@ -60,7 +60,7 @@ public class DiskScheduling {
                 }
             }
     
-            int arrRequests[] = new int[intReqNum];
+            int arrRequests[] = {};
     
             if (intReqNum <= 10 && intReqNum >= 1) {
                 arrRequests = new int[intReqNum];
@@ -81,7 +81,7 @@ public class DiskScheduling {
                 System.out.print("Number of Requests is invalid");
             }
 
-            printChoices(intCurrent, intSize, intReqNum, arrRequests);
+            printChoices(intCurrentPosition, intSize, intReqNum, arrRequests);
             
             System.out.print("\n\nInput again [y/n]?: ");
             strInput = input.next();
@@ -96,7 +96,7 @@ public class DiskScheduling {
         input.close();
     }
 
-    static void printChoices(int intCurrent, int intSize, int intReqNum, int arrRequests[]) {
+    static void printChoices(int intCurrentPosition, int intSize, int intReqNum, int arrRequests[]) {
         String strDirection = "", strChoice;
 
         System.out.println("\nChoose Disk Scheduling Algorithm: ");
@@ -112,40 +112,40 @@ public class DiskScheduling {
 
         switch (strChoice) {
             case "A":
-                System.out.println("First Come, First Serve (FCFS)");
+                System.out.println("\nFirst Come, First Serve (FCFS)");
                 FCFS fcfs = new FCFS();
-                fcfs.compute(intCurrent, arrRequests);
+                fcfs.compute(intCurrentPosition, arrRequests);
                 break;
             case "B":
-                System.out.println("Shortest Seek Time First (SSTF)");
+                System.out.println("\nShortest Seek Time First (SSTF)");
                 SSTF sstf = new SSTF();
-                sstf.compute(intCurrent, arrRequests);
+                sstf.compute(intCurrentPosition, arrRequests);
                 break;
             case "C":
                 strDirection = getDirection();
 
-                System.out.println("SCAN");
+                System.out.println("\nSCAN");
                 SCAN scan = new SCAN();
-                scan.compute(intCurrent, arrRequests, intSize, strDirection);
+                scan.compute(intCurrentPosition, arrRequests, intSize, strDirection);
                 break;
             case "D":
                 strDirection = getDirection();
-                System.out.println("LOOK");
+                
+                System.out.println("\nLOOK");
                 LOOK look = new LOOK();
-                look.compute(intCurrent, arrRequests, intSize, strDirection);
+                look.compute(intCurrentPosition, arrRequests, intSize, strDirection);
                 
                 break;
             case "E":
-                System.out.println("Circular SCAN");
+                System.out.println("\nCircular SCAN");
                 CSCAN cscan = new CSCAN();
 
-                cscan.compute(intCurrent, arrRequests, intSize);
+                cscan.compute(intCurrentPosition, arrRequests, intSize);
                 break;
             case "F":
-     
-                System.out.println("Circular LOOK");
+                System.out.println("\nCircular LOOK");
                 CLOOK clook = new CLOOK();
-                clook.compute(intCurrent, arrRequests, intSize);
+                clook.compute(intCurrentPosition, arrRequests, intSize);
                 
                 break;
             case "G":

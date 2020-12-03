@@ -1,35 +1,34 @@
 public class SSTF {
-    public void compute(int intCurrentPosition, int intArrayRequests[]) {
-        node diff[] = new node[intArrayRequests.length];
+    public void compute(int intCurrentPosition, int arrRequests[]) {
+        node diff[] = new node[arrRequests.length];
 
         for (int i = 0; i < diff.length; i++){
             diff[i] = new node();
         }
 
         int seek_time = 0;
-        int[] seek_sequence = new int[intArrayRequests.length + 1];
+        int[] seek_sequence = new int[arrRequests.length + 1];
 
-        for (int i = 0; i < intArrayRequests.length; i++) {
+        for (int i = 0; i < arrRequests.length; i++) {
             seek_sequence[i] = intCurrentPosition;
-            calculateDifference(intArrayRequests, intCurrentPosition, diff);
+            calculateDifference(arrRequests, intCurrentPosition, diff);
 
             int index = findMin(diff);
 
             diff[index].accessed = true;
             seek_time += diff[index].distance;
 
-            intCurrentPosition = intArrayRequests[index];
+            intCurrentPosition = arrRequests[index];
         }
 
         seek_sequence[seek_sequence.length - 1] = intCurrentPosition;
         
-        System.out.println("Seekk Sequence is:");
+        System.out.println("Seek Sequence is:");
 
         for (int i = 0; i < seek_sequence.length; i++){
-            System.out.println("Track: " + seek_sequence[i]);
+            System.out.println(seek_sequence[i]);
         }
-
-        System.out.println("Total Seek Time: " + seek_time);
+        System.out.println("\nTotal Seek Time: " + seek_time);
     }
 
     public static int findMin(node diff[]) {
