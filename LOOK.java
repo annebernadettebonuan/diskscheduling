@@ -1,54 +1,69 @@
 import java.util.*;
 public class LOOK{
-	public void compute(int intCurrentPosition, int intArrayRequests[], int intTrackSize, String strDirection){
-        int intDistance, intCurTrack,intSeekCount = 0;
+	public void compute(int intCurrentPosition, int arrRequests[], String strDirection){
+        int intDistance, intCurTrack,seek_time = 0;
         ArrayList<Integer> arrayLeft = new ArrayList<Integer>();
         ArrayList<Integer> arrayRight = new ArrayList<Integer>();
         ArrayList<Integer> arraySequence = new ArrayList<Integer>();
         
-         for (int i = 0; i < intArrayRequests.length; i++) { 
-            if (intArrayRequests[i] < intCurrentPosition){ 
-                arrayLeft.add(intArrayRequests[i]); 
+         for (int i = 0; i < arrRequests.length; i++) { 
+            if (arrRequests[i] < intCurrentPosition){ 
+                arrayLeft.add(arrRequests[i]); 
             }
-            else if (intArrayRequests[i] > intCurrentPosition) {
-                arrayRight.add(intArrayRequests[i]); 
+            else if (arrRequests[i] > intCurrentPosition) {
+                arrayRight.add(arrRequests[i]); 
             }
         }   
     
         Collections.sort(arrayLeft);
         Collections.sort(arrayRight);
     
-        System.out.println("Seek Sequence is:\n" + intCurrentPosition);
-
         int run = 2;
         while (run-- > 0){
             switch (strDirection){
             case "left":
-                for (int i = arrayLeft.size() - 1; i >= 0; i--) 
-                {
-                    intCurTrack = arrayLeft.get(i);
-                    System.out.println(intCurTrack);
+                int left = arrayLeft.size() - 1;
+
+                while(left >= 0){
+                    intCurTrack = arrayLeft.get(left);
                     arraySequence.add(intCurTrack);
-                    intDistance = Math.abs(intCurTrack - intCurrentPosition);
-                    intSeekCount += intDistance;
+                    
+                    intDistance = intCurTrack - intCurrentPosition;
+                    
+                    if(intDistance < 0){
+                        intDistance *= -1;
+                    }
+
+                    seek_time += intDistance;
                     intCurrentPosition = intCurTrack;
+
+                    left--;
                 }
                 strDirection = "right";
                 break;
+
             case "right":
-                for (int i = 0; i < arrayRight.size(); i++) 
-                {
-                    intCurTrack = arrayRight.get(i);
-                    System.out.println(intCurTrack);
+                int right = 0;
+
+                while(right < arrayRight.size()){
+                    intCurTrack = arrayRight.get(right);
                     arraySequence.add(intCurTrack);
-                    intDistance = Math.abs(intCurTrack - intCurrentPosition);
-                    intSeekCount += intDistance;
+
+                    intDistance = intCurTrack - intCurrentPosition;
+
+                    if(intDistance < 0){
+                        intDistance *= -1;
+                    }
+
+                    seek_time += intDistance;
                     intCurrentPosition = intCurTrack;
+
+                    right++;
                 }
                 strDirection = "left";
                 break;
             }
         }
-        System.out.println("\nTotal Seek Time : " + intSeekCount);
+        System.out.println("\nTotal Seek Time : " + seek_time);
     }
 }

@@ -1,6 +1,6 @@
 import java.util.*;
 public class CLOOK{
-	public void compute(int intCurrentPosition, int arrRequests[], int intTrackSize){
+	public void compute(int intCurrentPosition, int arrRequests[]){
         int intDistance, intCurTrack, seek_time = 0;
         ArrayList<Integer> arrayLeft = new ArrayList<Integer>();
         ArrayList<Integer> arrayRight = new ArrayList<Integer>();
@@ -18,34 +18,50 @@ public class CLOOK{
         Collections.sort(arrayLeft);
         Collections.sort(arrayRight);
 
-        System.out.println("Seek sequence is:\n" + intCurrentPosition);
-
-        for (int i = 0; i < arrayRight.size(); i++) {
-            intCurTrack = arrayRight.get(i); 
-            System.out.println(intCurTrack);
+        int right = 0;
+        
+        while(right < arrayRight.size()){
+            intCurTrack = arrayRight.get(right); 
             arraySequence.add(intCurTrack); 
     
-            intDistance = Math.abs(intCurTrack - intCurrentPosition); 
-    
+            intDistance = intCurTrack - intCurrentPosition;
+
+            if(intDistance < 0){
+                intDistance *= -1;
+            }
             seek_time += intDistance; 
     
             intCurrentPosition = intCurTrack; 
+
+            right++;
         }
     
-        seek_time += Math.abs(intCurrentPosition - arrayLeft.get(0));
+        intDistance = intCurrentPosition - arrayLeft.get(0);
+
+        if(intDistance < 0){
+            intDistance *= -1;
+        }
+        
+        seek_time += intDistance;
+        
         intCurrentPosition = arrayLeft.get(0);
 
-        for (int i = 0; i < arrayLeft.size(); i++) { 
-            intCurTrack = arrayLeft.get(i); 
-            System.out.println(intCurTrack);
+        int left = 0;
+
+        while(left < arrayLeft.size()){
+            intCurTrack = arrayLeft.get(left); 
             arraySequence.add(intCurTrack); 
     
-            intDistance = Math.abs(intCurTrack - intCurrentPosition); 
-    
+            intDistance = intCurTrack - intCurrentPosition;
+
+            if(intDistance < 0){
+                intDistance *= -1;
+            }
             seek_time += intDistance; 
     
             intCurrentPosition = intCurTrack; 
-        } 
+            left++;
+        }
     
         System.out.println("\nTotal Seek Time : " + seek_time);
     }

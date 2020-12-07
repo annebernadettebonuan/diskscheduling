@@ -9,6 +9,7 @@ public class CSCAN {
 
         arrayLeft.add(0);
         arrayRight.add(intSize - 1);
+
         for (int i = 0; i < arrRequests.length; i++) {
             if (arrRequests[i] < intCurrentPosition) {
                 arrayLeft.add(arrRequests[i]);
@@ -19,34 +20,43 @@ public class CSCAN {
 
         Collections.sort(arrayLeft);
         Collections.sort(arrayRight);
-
-        System.out.println("Seek Sequence is:");
         
-        for (int i = 0; i < arrayRight.size(); i++) {
-            intCurTrack = arrayRight.get(i);
+        int right = 0;
+
+        while(right < arrayRight.size()){
+            intCurTrack = arrayRight.get(right);
             arraySequence.add(intCurTrack);
 
-            intDistance = Math.abs(intCurTrack - intCurrentPosition);
+            intDistance = intCurTrack - intCurrentPosition;
 
+            if(intDistance < 0){
+                intDistance *= -1;
+            }
             seek_time += intDistance;
 
-            System.out.println(intCurTrack);
-
             intCurrentPosition = intCurTrack;
+
+            right++;
         }
 
         intCurrentPosition = 0;
-        for (int i = 0; i < arrayLeft.size(); i++) {
-            intCurTrack = arrayLeft.get(i);
+
+        int left = 0;
+        while(left < arrayLeft.size()){
+            intCurTrack = arrayLeft.get(left);
 
             arraySequence.add(intCurTrack);
 
-            intDistance = Math.abs(intCurTrack - intCurrentPosition);
+            intDistance = intCurTrack - intCurrentPosition;
+
+            if(intDistance < 0){
+                intDistance *= -1;
+            }
             
             seek_time += intDistance;
 
-            System.out.println(intCurTrack);
             intCurrentPosition = intCurTrack;
+            left++;
         }
 
         System.out.println("\nTotal Seek Time: " + seek_time);

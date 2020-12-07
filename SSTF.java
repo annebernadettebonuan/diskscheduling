@@ -1,57 +1,44 @@
 public class SSTF {
     public void compute(int intCurrentPosition, int arrRequests[]) {
-        node diff[] = new node[arrRequests.length];
+        int seek_time = 0, intDistance;
 
-        for (int i = 0; i < diff.length; i++){
-            diff[i] = new node();
-        }
-
-        int seek_time = 0;
-        int[] seek_sequence = new int[arrRequests.length + 1];
-
-        for (int i = 0; i < arrRequests.length; i++) {
-            seek_sequence[i] = intCurrentPosition;
-            calculateDifference(arrRequests, intCurrentPosition, diff);
-
-            int index = findMin(diff);
-
-            diff[index].accessed = true;
-            seek_time += diff[index].distance;
-
-            intCurrentPosition = arrRequests[index];
-        }
-
-        seek_sequence[seek_sequence.length - 1] = intCurrentPosition;
+        int[] n = new int[arrRequests.length + 1]; 
         
-        System.out.println("Seek Sequence is:");
+		for(int i = 0 ; i < arrRequests.length ; i++)
+		{
+			int min = 100000;
+            int index = 0, j = 0;
 
-        for (int i = 0; i < seek_sequence.length; i++){
-            System.out.println(seek_sequence[i]);
-        }
-        System.out.println("\nTotal Seek Time: " + seek_time);
-    }
+            while(j < arrRequests.length){
+                int compare = arrRequests[j] - intCurrentPosition;
+                
+                if(compare < 0){
+                    compare *= -1;
+                }
 
-    public static int findMin(node diff[]) {
-        int index = -1, minimum = Integer.MAX_VALUE;
-
-        for (int i = 0; i < diff.length; i++) {
-            if (!diff[i].accessed && minimum > diff[i].distance) {
-
-                minimum = diff[i].distance;
-                index = i;
+                if(compare < min)
+				{
+					if(n[j]==0)
+					{
+						min = Math.abs(arrRequests[j] - intCurrentPosition);
+						index = j;
+					}
+				}
+                j++;
             }
-        }
-        return index;
-    }
+            n[index] = 1;
 
-    public static void calculateDifference(int queue[], int head, node diff[]) {
-        for (int i = 0; i < diff.length; i++) {
-            diff[i].distance = Math.abs(queue[i] - head);
-        }
+            intDistance = arrRequests[index] - intCurrentPosition;
+            
+            if(intDistance < 0){
+                intDistance *= -1;
+            }
+            
+            seek_time += intDistance;
+           
+			intCurrentPosition = arrRequests[index];
+		}
+		
+        System.out.println("\nTotal Seek Time :" + seek_time);
     }
-}
-
-class node {
-    int distance = 0;
-    boolean accessed = false;
 }

@@ -1,49 +1,86 @@
 public class SCAN{
-	public void compute(int intCurrentPosition, int arrRequests[], int intSize, String direction){
-		int intFirstLocation = 0, intLastLocation = intSize - 1, seek_time = 0;
+	public void compute(int intCurrentPosition, int arrRequests[], int intSize, String strDirection){
+		int intFirstLocation = 0, intLastLocation = intSize - 1, seek_time = 0, intDistance;
 
-		int[] visited = new int[arrRequests.length + 1];
-
-        System.out.println("Seek Sequence is:");
+		int[] n = new int[arrRequests.length + 1];
 
 		for (int i = 0 ; i < arrRequests.length ; i++){
-			int position = -1;
-			int min = 10000;
-			for(int j = 0 ; j < arrRequests.length ; j++){
-				if(direction.equals("right")){
-					if(arrRequests[j] > intCurrentPosition && min > Math.abs(arrRequests[j] - intCurrentPosition) && visited[j] == 0){
-						min = Math.abs(arrRequests[j] - intCurrentPosition);
-						position = j;
-					}
+			int min = 10000, index = -1, j = 0;
+
+			while(j < arrRequests.length){
+				int compare = arrRequests[j] - intCurrentPosition;
+
+				if(compare < 0){
+					compare *= -1;
 				}
-				else if(direction.equals("left")){
-					if(arrRequests[j] <= intCurrentPosition && min > Math.abs(arrRequests[j] - intCurrentPosition) && visited[j] == 0){
-						position = j;
-						min = Math.abs(arrRequests[j] - intCurrentPosition);
-					}
+
+				switch(strDirection){
+					case "right":
+						if(arrRequests[j] > intCurrentPosition && min > compare && n[j] == 0){
+							min = arrRequests[j] - intCurrentPosition;
+							
+							if(min < 0){
+								min *= -1;
+							}
+							index = j;
+						}
+					break;
+
+					case "left":
+						if(arrRequests[j] <= intCurrentPosition && min > compare && n[j] == 0){
+							index = j;
+							min = arrRequests[j] - intCurrentPosition;
+							
+							if(min < 0){
+								min *= -1;
+							}
+						}
+					break;
 				}
+				j++;
 			}
-			if(position == -1){
-				if(direction.equals("right")){
-					direction = "left";
-					seek_time += Math.abs(intLastLocation - intCurrentPosition);
-                    intCurrentPosition = intLastLocation;
-                    System.out.println(intLastLocation);
+
+			if(index == -1){
+				switch(strDirection){
+					case "right":
+						strDirection = "left";
+
+						intDistance = intLastLocation - intCurrentPosition;
+
+						if(intDistance < 0){
+							intDistance *= -1;
+						}
+						seek_time += intDistance;
+						intCurrentPosition = intLastLocation;
+						break;
+						
+					case "left":
+						strDirection = "right";
+
+						intDistance = intFirstLocation - intCurrentPosition;
+
+						if(intDistance < 0){
+							intDistance *= -1;
+						}
+						
+						seek_time += intDistance;
+						intCurrentPosition = intFirstLocation;
+						break;
 				}
-				else{
-					direction = "right";
-					seek_time += Math.abs(intFirstLocation - intCurrentPosition);
-                    intCurrentPosition = intFirstLocation;
-                    System.out.println(intFirstLocation);
-                }
 				i--;
 				continue;
 			}
-			visited[position] = 1;
-            seek_time += Math.abs(arrRequests[position] - intCurrentPosition);
+			n[index] = 1;
+
+			intDistance = arrRequests[index] - intCurrentPosition;
+
+			if(intDistance < 0){
+				intDistance *= -1;
+			}
+
+            seek_time += intDistance;
             
-			System.out.println(arrRequests[position]);
-			intCurrentPosition = arrRequests[position];
+			intCurrentPosition = arrRequests[index];
 		}
 		System.out.println("\nTotal Seek Time : " + seek_time);
 	}

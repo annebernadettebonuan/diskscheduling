@@ -139,7 +139,7 @@ public class DiskScheduling {
                 
                 System.out.println("\nLOOK");
                 LOOK look = new LOOK();
-                look.compute(intCurrentPosition, arrRequests, intSize, strDirection);
+                look.compute(intCurrentPosition, arrRequests, strDirection);
                 
                 break;
             case "E":
@@ -151,7 +151,7 @@ public class DiskScheduling {
             case "F":
                 System.out.println("\nCircular LOOK");
                 CLOOK clook = new CLOOK();
-                clook.compute(intCurrentPosition, arrRequests, intSize);
+                clook.compute(intCurrentPosition, arrRequests);
                 
                 break;
             case "G":

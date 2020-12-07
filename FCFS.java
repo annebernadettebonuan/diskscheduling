@@ -2,16 +2,20 @@ public class FCFS {
     public void compute(int intCurrentPosition, int arrRequests[]) {
         int intDistance, intCurTrack, seek_time = 0;
 
-        System.out.println("Seek Sequence is:");
-        for (int i = 0; i < arrRequests.length; i++) {
+        int i = 0;
+        while(i < arrRequests.length){
             intCurTrack = arrRequests[i];
 
-            intDistance = Math.abs(intCurTrack - intCurrentPosition);
+            intDistance = intCurTrack - intCurrentPosition;
 
+            if(intDistance < 0){
+                intDistance *= -1;
+            }
+            
             seek_time += intDistance;
 
-            System.out.println(intCurTrack);
             intCurrentPosition = intCurTrack;
+            i++;
         }
         System.out.println("\nTotal Seek Time: " + seek_time);
     }
