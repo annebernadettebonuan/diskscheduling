@@ -8,7 +8,6 @@ import java.util.*;
 
 public class DiskScheduling {
     static Scanner input = new Scanner(System.in);
-
     public static void main(String[] args) {
         int intCurrentPosition = 0, intSize = 0, intReqNum = 0, intSeekRate = 0; //seek rate not used
         boolean isComplete = false;
