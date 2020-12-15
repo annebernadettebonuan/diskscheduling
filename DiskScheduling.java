@@ -119,39 +119,29 @@ public class DiskScheduling {
         switch (strChoice) {
             case "A":
                 System.out.println("\nFirst Come, First Serve (FCFS)");
-                FCFS fcfs = new FCFS();
-                fcfs.compute(intCurrentPosition, arrRequests);
+                computeFCFS(intCurrentPosition, arrRequests);
                 break;
             case "B":
                 System.out.println("\nShortest Seek Time First (SSTF)");
-                SSTF sstf = new SSTF();
-                sstf.compute(intCurrentPosition, arrRequests);
+                computeSSTF(intCurrentPosition, arrRequests);
                 break;
             case "C":
                 strDirection = getDirection();
-
                 System.out.println("\nSCAN");
-                SCAN scan = new SCAN();
-                scan.compute(intCurrentPosition, arrRequests, intSize, strDirection);
+                computeSCAN(intCurrentPosition, arrRequests, intSize, strDirection);
                 break;
             case "D":
                 strDirection = getDirection();
-                
                 System.out.println("\nLOOK");
-                LOOK look = new LOOK();
-                look.compute(intCurrentPosition, arrRequests, strDirection);
-                
+                computeLOOK(intCurrentPosition, arrRequests, strDirection);
                 break;
             case "E":
                 System.out.println("\nCircular SCAN");
-                CSCAN cscan = new CSCAN();
-
-                cscan.compute(intCurrentPosition, arrRequests, intSize);
+                computeCSCAN(intCurrentPosition, arrRequests, intSize);
                 break;
             case "F":
                 System.out.println("\nCircular LOOK");
-                CLOOK clook = new CLOOK();
-                clook.compute(intCurrentPosition, arrRequests);
+                computeCLOOK(intCurrentPosition, arrRequests);
                 
                 break;
             case "G":
@@ -175,9 +165,353 @@ public class DiskScheduling {
                     isCorrect = false;
                 }
             }catch(Exception e){
-            isCorrect = false;
+                isCorrect = false;
             }
         }
         return strDirection;
+    }
+
+    private static void computeFCFS(int intCurrentPosition, int arrRequests[]) {
+        int intDistance, intCurTrack, seek_time = 0;
+
+        int i = 0;
+        while(i < arrRequests.length){
+            intCurTrack = arrRequests[i];
+
+            intDistance = intCurTrack - intCurrentPosition;
+
+            if(intDistance < 0){
+                intDistance *= -1;
+            }
+            
+            seek_time += intDistance;
+
+            intCurrentPosition = intCurTrack;
+            i++;
+        }
+        System.out.println("\nTotal Seek Time: " + seek_time);
+    }
+
+    private static void computeSSTF(int intCurrentPosition, int arrRequests[]) {
+        int seek_time = 0, intDistance;
+
+        int[] n = new int[arrRequests.length + 1]; 
+        
+		for(int i = 0 ; i < arrRequests.length ; i++)
+		{
+			int min = 100000;
+            int index = 0, j = 0;
+
+            while(j < arrRequests.length){
+                int compare = arrRequests[j] - intCurrentPosition;
+                
+                if(compare < 0){
+                    compare *= -1;
+                }
+
+                if(compare < min)
+				{
+					if(n[j]==0)
+					{
+						min = Math.abs(arrRequests[j] - intCurrentPosition);
+						index = j;
+					}
+				}
+                j++;
+            }
+            n[index] = 1;
+
+            intDistance = arrRequests[index] - intCurrentPosition;
+            
+            if(intDistance < 0){
+                intDistance *= -1;
+            }
+            
+            seek_time += intDistance;
+           
+			intCurrentPosition = arrRequests[index];
+		}
+		
+        System.out.println("\nTotal Seek Time :" + seek_time);
+    }
+
+    private static void computeSCAN(int intCurrentPosition, int arrRequests[], int intSize, String strDirection){
+		int intFirstLocation = 0, intLastLocation = intSize - 1, seek_time = 0, intDistance;
+
+		int[] n = new int[arrRequests.length + 1];
+
+		for (int i = 0 ; i < arrRequests.length ; i++){
+			int min = 10000, index = -1, j = 0;
+
+			while(j < arrRequests.length){
+				int compare = arrRequests[j] - intCurrentPosition;
+
+				if(compare < 0){
+					compare *= -1;
+				}
+
+				switch(strDirection){
+					case "right":
+						if(arrRequests[j] > intCurrentPosition && min > compare && n[j] == 0){
+							min = arrRequests[j] - intCurrentPosition;
+							
+							if(min < 0){
+								min *= -1;
+							}
+							index = j;
+						}
+					break;
+
+					case "left":
+						if(arrRequests[j] <= intCurrentPosition && min > compare && n[j] == 0){
+							index = j;
+							min = arrRequests[j] - intCurrentPosition;
+							
+							if(min < 0){
+								min *= -1;
+							}
+						}
+					break;
+				}
+				j++;
+			}
+
+			if(index == -1){
+				switch(strDirection){
+					case "right":
+						strDirection = "left";
+
+						intDistance = intLastLocation - intCurrentPosition;
+
+						if(intDistance < 0){
+							intDistance *= -1;
+						}
+						seek_time += intDistance;
+						intCurrentPosition = intLastLocation;
+						break;
+						
+					case "left":
+						strDirection = "right";
+
+						intDistance = intFirstLocation - intCurrentPosition;
+
+						if(intDistance < 0){
+							intDistance *= -1;
+						}
+						
+						seek_time += intDistance;
+						intCurrentPosition = intFirstLocation;
+						break;
+				}
+				i--;
+				continue;
+			}
+			n[index] = 1;
+
+			intDistance = arrRequests[index] - intCurrentPosition;
+
+			if(intDistance < 0){
+				intDistance *= -1;
+			}
+
+            seek_time += intDistance;
+            
+			intCurrentPosition = arrRequests[index];
+		}
+		System.out.println("\nTotal Seek Time : " + seek_time);
+    }
+    
+    private static void computeLOOK(int intCurrentPosition, int arrRequests[], String strDirection){
+        int intDistance, intCurTrack,seek_time = 0;
+        ArrayList<Integer> arrayLeft = new ArrayList<Integer>();
+        ArrayList<Integer> arrayRight = new ArrayList<Integer>();
+        
+        
+         for (int i = 0; i < arrRequests.length; i++) { 
+            if (arrRequests[i] < intCurrentPosition){ 
+                arrayLeft.add(arrRequests[i]); 
+            }
+            else if (arrRequests[i] > intCurrentPosition) {
+                arrayRight.add(arrRequests[i]); 
+            }
+        }   
+    
+        Collections.sort(arrayLeft);
+        Collections.sort(arrayRight);
+    
+        int run = 2;
+        while (run-- > 0){
+            switch (strDirection){
+            case "left":
+                int left = arrayLeft.size() - 1;
+
+                while(left >= 0){
+                    intCurTrack = arrayLeft.get(left);
+                   
+                    
+                    intDistance = intCurTrack - intCurrentPosition;
+                    
+                    if(intDistance < 0){
+                        intDistance *= -1;
+                    }
+
+                    seek_time += intDistance;
+                    intCurrentPosition = intCurTrack;
+
+                    left--;
+                }
+                strDirection = "right";
+                break;
+
+            case "right":
+                int right = 0;
+
+                while(right < arrayRight.size()){
+                    intCurTrack = arrayRight.get(right);
+                   
+
+                    intDistance = intCurTrack - intCurrentPosition;
+
+                    if(intDistance < 0){
+                        intDistance *= -1;
+                    }
+
+                    seek_time += intDistance;
+                    intCurrentPosition = intCurTrack;
+
+                    right++;
+                }
+                strDirection = "left";
+                break;
+            }
+        }
+        System.out.println("\nTotal Seek Time : " + seek_time);
+    }
+
+    private static void computeCSCAN(int intCurrentPosition, int arrRequests[], int intSize) {
+        int intDistance, intCurTrack, seek_time = 0;
+        ArrayList<Integer> arrayLeft = new ArrayList<Integer>();
+        ArrayList<Integer> arrayRight = new ArrayList<Integer>();
+      
+
+        arrayLeft.add(0);
+        arrayRight.add(intSize - 1);
+
+        for (int i = 0; i < arrRequests.length; i++) {
+            if (arrRequests[i] < intCurrentPosition) {
+                arrayLeft.add(arrRequests[i]);
+            } else if (arrRequests[i] > intCurrentPosition) {
+                arrayRight.add(arrRequests[i]);
+            }
+        }
+
+        Collections.sort(arrayLeft);
+        Collections.sort(arrayRight);
+        
+        int right = 0;
+
+        while(right < arrayRight.size()){
+            intCurTrack = arrayRight.get(right);
+            
+
+            intDistance = intCurTrack - intCurrentPosition;
+
+            if(intDistance < 0){
+                intDistance *= -1;
+            }
+            seek_time += intDistance;
+
+            intCurrentPosition = intCurTrack;
+
+            right++;
+        }
+
+        intCurrentPosition = 0;
+
+        int left = 0;
+        while(left < arrayLeft.size()){
+            intCurTrack = arrayLeft.get(left);
+
+         
+
+            intDistance = intCurTrack - intCurrentPosition;
+
+            if(intDistance < 0){
+                intDistance *= -1;
+            }
+            
+            seek_time += intDistance;
+
+            intCurrentPosition = intCurTrack;
+            left++;
+        }
+
+        System.out.println("\nTotal Seek Time: " + seek_time);
+    }
+
+    private static void computeCLOOK(int intCurrentPosition, int arrRequests[]){
+        int intDistance, intCurTrack, seek_time = 0;
+        ArrayList<Integer> arrayLeft = new ArrayList<Integer>();
+        ArrayList<Integer> arrayRight = new ArrayList<Integer>();
+        
+         
+        for (int i = 0; i < arrRequests.length; i++) { 
+            if (arrRequests[i] < intCurrentPosition){ 
+                arrayLeft.add(arrRequests[i]); 
+            }
+            else if (arrRequests[i] > intCurrentPosition) {
+                arrayRight.add(arrRequests[i]); 
+            }
+        } 
+
+        Collections.sort(arrayLeft);
+        Collections.sort(arrayRight);
+
+        int right = 0;
+        
+        while(right < arrayRight.size()){
+            intCurTrack = arrayRight.get(right); 
+            
+    
+            intDistance = intCurTrack - intCurrentPosition;
+
+            if(intDistance < 0){
+                intDistance *= -1;
+            }
+            seek_time += intDistance; 
+    
+            intCurrentPosition = intCurTrack; 
+
+            right++;
+        }
+    
+        intDistance = intCurrentPosition - arrayLeft.get(0);
+
+        if(intDistance < 0){
+            intDistance *= -1;
+        }
+        
+        seek_time += intDistance;
+        
+        intCurrentPosition = arrayLeft.get(0);
+
+        int left = 0;
+
+        while(left < arrayLeft.size()){
+            intCurTrack = arrayLeft.get(left); 
+           
+    
+            intDistance = intCurTrack - intCurrentPosition;
+
+            if(intDistance < 0){
+                intDistance *= -1;
+            }
+            seek_time += intDistance; 
+    
+            intCurrentPosition = intCurTrack; 
+            left++;
+        }
+    
+        System.out.println("\nTotal Seek Time : " + seek_time);
     }
 }
