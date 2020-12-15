@@ -472,7 +472,6 @@ public class DiskScheduling {
         while(right < arrayRight.size()){
             intCurTrack = arrayRight.get(right); 
             
-    
             intDistance = intCurTrack - intCurrentPosition;
 
             if(intDistance < 0){
@@ -499,7 +498,6 @@ public class DiskScheduling {
 
         while(left < arrayLeft.size()){
             intCurTrack = arrayLeft.get(left); 
-           
     
             intDistance = intCurTrack - intCurrentPosition;
 
